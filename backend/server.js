@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import postRoutes from './routes/posts.routes.js';
 import userRoutes from './routes/user.routes.js';
+import multer from 'multer';
 
 // It **loads environment variables from a `.env` file into `process.env`**.
 dotenv.config();
@@ -17,6 +18,7 @@ app.use(express.json());
 
 app.use(postRoutes);
 app.use(userRoutes);
+app.use(multer);
 
 const startServer = async() =>{
     const connectDB = mongoose.connect(process.env.MONGO_DB_CREDS);
