@@ -18,7 +18,17 @@ app.use(express.json());
 
 app.use(postRoutes);
 app.use(userRoutes);
-app.use(multer);
+/**
+ * That means you’re trying to plug in the whole toolbox (multer package itself) into Express. 
+ * Express doesn’t understand it → so it breaks things.
+ */
+// app.use(multer);
+
+/**
+ * We will create a static server to access the generated pdf,files,pictures etc.
+ * Also, always use the relative path instead of absolute path because, for every user the absolute path is different'
+ */
+app.use(express.static("uploads"));
 
 const startServer = async() =>{
     const connectDB = mongoose.connect(process.env.MONGO_DB_CREDS);
