@@ -181,7 +181,7 @@ export const updateProfileData = async(req,res) => {
 
         const userProfile = await User.findOne({token});
         if(!userProfile){
-            return res.status(404).json({message: "User not found"});
+            return res.status(404).json({message: "User profile not found"});
         }
         const profileToUpdate = await Profile.findOne({userId: userProfile._id})
 

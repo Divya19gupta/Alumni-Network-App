@@ -1,3 +1,6 @@
+###
+#User related APIs
+
 POST http://localhost:9090/register HTTP/1.1
 Content-Type: application/json
 
@@ -52,6 +55,23 @@ Content-Type: application/json
 }
 
 ###
+# API for upload_profile_picture
+# curl --location 'http://localhost:9090/upload_profile_picture' \
+# --form 'token="51628b573c9ccac85e0c24a286618d7ee63ed766dd66f6737481b677986d77c7"' \
+# --form 'profile_picture=@"/Users/divyagupta/Desktop/zerodha-clone/zerodha/frontend/public/media/images/pricing0.svg"'
+
 
 GET http://localhost:9090/user/get_all_user_profile HTTP/1.1
 Content-Type: application/json
+
+###
+# Profile related APIs
+
+#Create Post API
+#curl --location 'http://localhost:9090/post' \
+# --form 'token="1606257ae381c5265c6b45eec97cccc3f26baa07a091fa8051793e3cab491132"' \
+# --form 'body="I'\''m trying to create a Full Stack AI application"' \
+# --form 'media=@"/Users/divyagupta/Desktop/zerodha-clone/zerodha/frontend/public/media/images/streakLogo.png"'
+
+###
+
