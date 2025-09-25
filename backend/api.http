@@ -75,3 +75,13 @@ Content-Type: application/json
 
 ###
 
+GET http://localhost:9090/posts HTTP/1.1
+Content-Type: application/json
+
+# "body": "I'm trying to create a Full Stack AI application",
+# "likes": 0,
+# 
+# "active": true, //admin has the right to make it false if detected as NFSW by AI
+# 
+# for heavy jobs where you have to check the security for every post, corn jobs are used on the backend
+
