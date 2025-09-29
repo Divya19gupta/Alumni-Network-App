@@ -113,7 +113,7 @@ export default function ProfileEditor({
   const [form, setForm] = useState(initialForm);
   const [globalEditMode, setGlobalEditMode] = useState(false);
   const [localPastWorkDraft, setLocalPastWorkDraft] = useState({
-    title: "",
+    position: "",
     company: "",
   });
   const [localEducationDraft, setLocalEducationDraft] = useState({
@@ -136,9 +136,9 @@ export default function ProfileEditor({
 
   const handleAddPastWork = () => {
     const newEntry = { ...localPastWorkDraft };
-    if (!newEntry.title && !newEntry.company) return;
+    if (!newEntry.position && !newEntry.company) return;
     setForm((prev) => ({ ...prev, pastWork: [...prev.pastWork, newEntry] }));
-    setLocalPastWorkDraft({ title: "", company: "" });
+    setLocalPastWorkDraft({ position: "", company: "" });
   };
 
   const handleAddEducation = () => {
@@ -156,18 +156,7 @@ export default function ProfileEditor({
     });
   };
 
-  // const handleProfilePicClick = () => {
-  //   if (fileInputRef.current) fileInputRef.current.click();
-  // };
-
-  // const handleFileChange = (e) => {
-  //   const f = e.target.files?.[0];
-  //   if (f) {
-  //     const url = URL.createObjectURL(f);
-  //     setForm((prev) => ({ ...prev, profilePicture: url }));
-  //     onProfilePicChange(f);
-  //   }
-  // };
+  
 
   const handleGlobalCancel = () => {
     setForm(initialForm);
@@ -175,7 +164,7 @@ export default function ProfileEditor({
   };
 
   const handleGlobalSubmit = () => {
-    onSubmit(form);
+    updateUserProfile();
     setGlobalEditMode(false);
   };
 
@@ -192,6 +181,22 @@ export default function ProfileEditor({
 
   // Refresh user profile after upload
   dispatch(getAboutUser({ token: localStorage.getItem("token") }));
+  }
+
+  const updateUserProfile = async () => {
+    const req = await clientServer.post('/update_profile', {
+      token: localStorage.getItem('token'),
+      name: form.name,
+    })
+    const res = await clientServer.post('/update_profile_data', {
+      token: localStorage.getItem('token'),
+      bio: form.bio,
+      currentPost: form.currentPost,
+      pastWork: Array.isArray(form.pastWork) ? form.pastWork : [form.pastWork],
+      education: Array.isArray(form.education) ? form.education : [form.education],
+    })
+
+    dispatch(getAboutUser({ token: localStorage.getItem("token") }));
   }
 
   return (
@@ -355,7 +360,7 @@ export default function ProfileEditor({
                     >
                       <Box>
                         <Typography sx={{ fontWeight: 600 }}>
-                          {pw.title || "—"}
+                          {pw.position || "—"}
                         </Typography>
                         <Typography variant="caption" color="text.secondary">
                           {pw.company || ""}
@@ -375,13 +380,13 @@ export default function ProfileEditor({
                   {globalEditMode && (
                     <Box sx={{ display: "flex", gap: 1, mt: 1 }}>
                       <TextField
-                        placeholder="Title"
+                        placeholder="Position"
                         size="small"
-                        value={localPastWorkDraft.title}
+                        value={localPastWorkDraft.position}
                         onChange={(e) =>
                           setLocalPastWorkDraft((prev) => ({
                             ...prev,
-                            title: e.target.value,
+                            position: e.target.value,
                           }))
                         }
                       />
