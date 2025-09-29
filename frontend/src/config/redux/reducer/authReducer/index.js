@@ -1,4 +1,4 @@
-import { registerUser, loginUser, getAboutUser } from "../../action/authAction";
+import { registerUser, loginUser, getAboutUser, getAllUserProfiles, downloadProfile, uploadProfilePicture  } from "../../action/authAction";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -89,7 +89,68 @@ const authSlice = createSlice({
             state.message = action.payload ? action.payload : 'Fetching user and profile failed';
             state.user = [];
             state.profileFetched = false;
-        }) 
+        })
+        .addCase(getAllUserProfiles.pending, (state) => {
+            state.isLoading = true;
+            state.message = 'Fetching all users...';
+        })
+        .addCase(getAllUserProfiles.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.isError = false;
+            state.isSuccess = true;
+            state.message = 'All users fetched successfully';
+            state.connections = action.payload.profiles || [];
+            state.connectionRequest = [];
+        })
+        .addCase(getAllUserProfiles.rejected, (state, action) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.isSuccess = false;
+            state.message = action.payload ? action.payload : 'Fetching all users failed';
+            state.connections = [];
+            state.connectionRequest = [];
+        })
+        .addCase(downloadProfile.pending, (state) => {
+            state.isLoading = true;
+            state.message = 'Fetching all users...';
+        })
+        .addCase(downloadProfile.fulfilled, (state, action) => {
+            state.isLoading = false;
+            state.isError = false;
+            state.isSuccess = true;
+            state.message = 'Downloaded Resume';
+        })
+        .addCase(downloadProfile.rejected,  (state, action) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.isSuccess = false;
+            state.message = 'Downloading failed';
+        })
+    //     .addCase(uploadProfilePicture.pending, (state) => {
+    //   state.isLoading = true;
+    //   state.message = "Uploading profile picture...";
+    // })
+    // .addCase(uploadProfilePicture.fulfilled, (state, action) => {
+    //   state.isLoading = false;
+    //   state.isError = false;
+    //   state.isSuccess = true;
+    //   state.message = action.payload.message || "Profile picture updated";
+
+    //   // Update user in state with new picture if returned
+    //   if (state.user?.userId) {
+    //     state.user.userId.profilePicture = action.payload.profilePicture;
+    //   }
+    // })
+    // .addCase(uploadProfilePicture.rejected, (state, action) => {
+    //   state.isLoading = false;
+    //   state.isError = true;
+    //   state.isSuccess = false;
+    //   state.message = action.payload?.message || "Profile picture upload failed";
+    // });
+
+        
+        
+        
     }
 })
 

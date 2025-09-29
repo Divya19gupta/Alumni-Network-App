@@ -73,14 +73,52 @@ export const getAboutUser = createAsyncThunk(
     }
 );
 
-export const getAllUsers = createAsyncThunk(
-    'user/getAllUsers',
+export const getAllUserProfiles = createAsyncThunk(
+    'user/getAllUserProfiles',
     async (_, thunkAPI) => {
         try {
-            const response = await clientServer.get('/get_all_users');
+            const response = await clientServer.get('/user/get_all_user_profile');
             return thunkAPI.fulfillWithValue(response.data);
         }
         catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
         }
-    });    
+    }
+);      
+
+export const downloadProfile = createAsyncThunk(
+  'user/downloadProfile',
+  async (id, thunkAPI) => {
+  try {
+    const response = await clientServer.get(`/user/download_profile?id=${id}`);
+    return thunkAPI.fulfillWithValue(response.data);
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response.data);
+  }
+}
+);
+// You can add more user-related actions here, such as logout, update profile, etc.
+
+export const updateUserProfile = createAsyncThunk()
+
+
+// export const uploadProfilePicture = createAsyncThunk(
+//   "user/uploadProfilePicture",
+//   async ({ file, token }, thunkAPI) => {
+//     try {
+//       const formData = new FormData();
+//       formData.append("profile_picture", file); // File object from <input>
+//       formData.append("token", token);
+
+//       const response = await clientServer.post(`/upload_profile_picture`, formData, {
+//         headers: { "Content-Type": "multipart/form-data" },
+//       });
+
+//       return thunkAPI.fulfillWithValue(response.data);
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(
+//         error.response?.data || { message: "Upload failed" }
+//       );
+//     }
+//   }
+// );

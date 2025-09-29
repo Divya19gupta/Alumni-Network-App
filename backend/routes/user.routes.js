@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { downloadProfile, getAllUserProfile, getUserAndProfile, login, register, updateProfileData, updateUserProfile, uploadProfilePicture } from '../contollers/user.controller.js';
+import { downloadProfile, getAllUserProfile, getUserAndProfile, login, register, updateProfileData, updateUserProfile, uploadProfilePicture, getUserProfileBasedOnUsername } from '../contollers/user.controller.js';
 import multer from 'multer';
 
 const router = Router();
@@ -34,4 +34,5 @@ router.route('/get_user_and_profile').get(getUserAndProfile)
 router.route('/update_profile_data').post(updateProfileData);
 router.route('/user/get_all_user_profile').get(getAllUserProfile);
 router.route('/user/download_profile').get(downloadProfile);
+router.route('/user/get_profile_based_on_username').get(getUserProfileBasedOnUsername);
 export default router;

@@ -96,24 +96,25 @@ const { name, email, password, username } = req.body;
 
 }
 
-export const uploadProfilePicture = async(req,res) => {
+export const uploadProfilePicture = async (req, res) => {
+  const { token } = req.body;
 
-    const { token } = req.body;
+  try {
+    const user = await User.findOne({ token }); // Replace with JWT decode if needed
+    if (!user) return res.status(404).json({ message: "User not found" });
 
-    try {
-
-        const user = await User.findOne({ token });
-        if(!user) return res.status(404).json({message: "User not found"});
-
-        user.profilePicture = req.file.filename;
-        await user.save();
-
-        return res.json({message: "Profile picture updated"});
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
     }
-    catch(e) {
-        return res.status(500).json({message: e.message});
-    }
-}
+
+    user.profilePicture = req.file.filename;
+    await user.save();
+
+    return res.json({ message: "Profile picture updated", profilePicture: user.profilePicture });
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
+};
 
 export const updateUserProfile = async(req,res) => {
     try {
@@ -218,7 +219,7 @@ export const getAllUserProfile = async(req,res) => {
      */
 
     try {
-        const profiles = await Profile.find({}).populate('userId','name username email profilePicture');
+        const profiles = await Profile.find({}).populate('userId','name username email profilePicture').lean();
         return res.status(200).json({profiles});
     }   
     catch(error) {
@@ -231,15 +232,37 @@ export const getAllUserProfile = async(req,res) => {
  * So while downloaing the profile, we can use the userId directly as when you navigate to the UI, you'll 
  * see the username of the users, token is something private to them. So we can exploit the userId directly. 
  */
-export const downloadProfile = async(req,res) => {
+export const downloadProfile = async (req, res) => {
+  try {
+    const userId = req.query.id;
+    const userProfile = await Profile.findOne({ userId })
+      .populate("userId", "name email username profilePicture");
+
+    if (!userProfile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    const outputPath = await convertUserDataToPDF(userProfile);
+
+    return res.json({ message: outputPath });
+  } catch (error) {
+    console.error("Download profile error:", error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getUserProfileBasedOnUsername = async(req,res) => {
     try {
-        const userId = req.query.id;
-        const userProfile = await Profile.findOne({userId: userId})
-        .populate('userId','name email username profilePicture');
+        const { username } = req.query;
+        const user = await User.findOne({username});
+        if(!user) {
+            return res.status(404).json({message: "User not found"});
+        }
 
-        let outputPath = await convertUserDataToPDF(userProfile);
+        const userProfile = await Profile.findOne({userId: user._id})
+        .populate("userId" , "name email password profilePicture")
 
-        return res.json({"message": outputPath})
+        return res.json({'profile':userProfile});
 
     }   
     catch(error) {

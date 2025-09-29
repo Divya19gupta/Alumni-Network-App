@@ -82,30 +82,29 @@ const dispatch = useDispatch();
         <Toolbar />
         <Box sx={{ overflow: "auto" }}>
           <List sx={{pointerEvents:'cursor'}}>
-            <ListItem button onClick={() => router.push("/connections")}>
-              <ListItemIcon sx={{ color: "white" }}>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary="Search" />
-            </ListItem>
-            <ListItem button onClick={() => router.push("/dashboard")}>
+
+            <ListItem button onClick={() => router.push("/profile")}>
               <ListItemIcon sx={{ color: "white" }}>
                 <PersonIcon />
+                
               </ListItemIcon>
               <ListItemText primary="Profile" />
             </ListItem>
+
+            <ListItem button onClick={() => router.push("/dashboard")}>
+              <ListItemIcon sx={{ color: "white" }}>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+            </ListItem>
+            
             <ListItem button onClick={() => router.push("/discover")}>
               <ListItemIcon sx={{ color: "white" }}>
                 <WorkIcon />
               </ListItemIcon>
               <ListItemText primary="Discover" />
             </ListItem>
-            <ListItem button>
-              <ListItemIcon sx={{ color: "white" }}>
-                <SchoolIcon />
-              </ListItemIcon>
-              <ListItemText primary="Education" />
-            </ListItem>
+
             <Divider sx={{ bgcolor: "rgba(255,255,255,0.2)", my: 1 }} />
             <ListItem button onClick={async() =>  {
                 const token = localStorage.getItem('token');

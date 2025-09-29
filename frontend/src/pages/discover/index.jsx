@@ -1,163 +1,131 @@
 import DashboardLayout from '../../layout/DashboardLayout';
-import { Box, Typography, Card, CardContent, Avatar, Grid, IconButton, Button, Stack } from "@mui/material";
+import { Box, Typography, Card, Avatar, Stack, IconButton } from "@mui/material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import ViewListIcon from "@mui/icons-material/ViewList";
-import GridViewIcon from "@mui/icons-material/GridView";
-import React, { useState } from "react";
-
-// Sample users array for layout (replace with API data later)
-const sampleUsers = [
-  { id: 1, name: "Alice Johnson", username: "@alice", avatar: "" },
-  { id: 2, name: "Bob Smith", username: "@bob", avatar: "" },
-  { id: 3, name: "Charlie Lee", username: "@charlie", avatar: "" },
-  { id: 4, name: "Diana Prince", username: "@diana", avatar: "" },
-];
-
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getAllUserProfiles } from '@/config/redux/action/authAction';
+import { useRouter } from 'next/router';
+import { BASE_URL } from '@/config';
 export default function Discover() {
   const oliveGreen = "#556B2F"; // theme color
-  const [view, setView] = useState("grid"); // "grid" or "list"
+  const [isToken, setIsToken] = useState(false);
+
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      router.push("/login");
+    } else {
+      setIsToken(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isToken) {
+      dispatch(getAllUserProfiles());
+    }
+  }, [isToken]);
+
+  const users = auth.connections || [];
+
+  const renderProfileContent = (profile) => (
+    <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+      <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+        {profile.userId.name || "No Name"}
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        @{profile.userId.username || "No Username"}
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        {profile.currenPost || "-"}
+      </Typography>
+
+      <Typography variant="body2" sx={{ fontWeight: "bold", mt: 1 }}>
+        Bio:
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        {profile.bio || "-"}
+      </Typography>
+
+      <Typography variant="body2" sx={{ fontWeight: "bold", mt: 1 }}>
+        Past Work:
+      </Typography>
+      {profile.pastWork.length > 0 ? (
+        profile.pastWork.map((work) => (
+          <Typography key={work._id} variant="body2" color="text.secondary">
+            {work.position} at {work.company} ({work.years})
+          </Typography>
+        ))
+      ) : (
+        <Typography variant="body2" color="text.secondary">-</Typography>
+      )}
+
+      <Typography variant="body2" sx={{ fontWeight: "bold", mt: 1 }}>
+        Education:
+      </Typography>
+      {profile.education.length > 0 ? (
+        profile.education.map((edu) => (
+          <Typography key={edu._id} variant="body2" color="text.secondary">
+            {edu.degree} in {edu.fieldOfStudy} from {edu.school}
+          </Typography>
+        ))
+      ) : (
+        <Typography variant="body2" color="text.secondary">-</Typography>
+      )}
+    </Box>
+  );
 
   return (
     <DashboardLayout title="Discover">
-      <Typography
-        variant="h5"
-        sx={{ mb: 2, fontWeight: "bold", color: oliveGreen }}
-      >
+      <Typography variant="h5" sx={{ mb: 2, fontWeight: "bold", color: oliveGreen }}>
         Find Connections
       </Typography>
 
-      {/* View toggle buttons */}
-      <Stack direction="row" spacing={1} sx={{ mb: 3 }}>
-        <Button
-          variant={view === "grid" ? "contained" : "outlined"}
-          startIcon={<GridViewIcon />}
-          onClick={() => setView("grid")}
-          sx={{
-            backgroundColor: view === "grid" ? oliveGreen : "#fff",
-            color: view === "grid" ? "#fff" : oliveGreen,
-            "&:hover": {
-              backgroundColor: oliveGreen,
-              color: "#fff",
-            },
-          }}
-        >
-          Grid
-        </Button>
-        <Button
-          variant={view === "list" ? "contained" : "outlined"}
-          startIcon={<ViewListIcon />}
-          onClick={() => setView("list")}
-          sx={{
-            backgroundColor: view === "list" ? oliveGreen : "#fff",
-            color: view === "list" ? "#fff" : oliveGreen,
-            "&:hover": {
-              backgroundColor: oliveGreen,
-              color: "#fff",
-            },
-          }}
-        >
-          List
-        </Button>
-      </Stack>
+      <Stack spacing={2}>
+        {users.map((profile) => (
+          <Card
+          onClick={() => router.push(`/viewProfile/${profile.userId.username}`)}
+            key={profile._id}
+            sx={{
+              p: 2,
+              borderRadius: 3,
+              boxShadow: 2,
+              backgroundColor: "#fff",
+              display: "flex",
+              gap: 2,
+              minHeight: 180,
+              alignItems: "flex-start",
+              cursor: 'pointer',
+            }}
+          >
+            <Avatar
+              src={`${BASE_URL}/${profile.userId?.profilePicture}`}
+              alt={profile.userId.name}
+              sx={{ width: 56, height: 56, bgcolor: oliveGreen }}
+            >
+              {profile.userId.name[0]}
+            </Avatar>
 
-      {view === "grid" ? (
-        <Grid container spacing={3}>
-          {sampleUsers.map((user) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={user.id}>
-              <Card
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  p: 2,
-                  borderRadius: 3,
-                  boxShadow: 3,
-                  backgroundColor: "#fff",
-                  transition: "transform 0.2s, box-shadow 0.2s",
-                  "&:hover": {
-                    transform: "translateY(-5px)",
-                    boxShadow: 6,
-                  },
-                }}
-              >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                  <Avatar
-                    src={user.avatar}
-                    alt={user.name}
-                    sx={{ width: 56, height: 56, bgcolor: oliveGreen }}
-                  >
-                    {user.name[0]}
-                  </Avatar>
-                  <Box>
-                    <Typography
-                      variant="subtitle1"
-                      sx={{ fontWeight: "bold", color: "#000" }}
-                    >
-                      {user.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {user.username}
-                    </Typography>
-                  </Box>
-                </Box>
-                {/* <IconButton
-                  sx={{
-                    ml: 3,
-                    color: "#fff",
-                    ,
-                  }}
-                > */}
-                  <PersonAddIcon sx={{ml:3, size: "small", color:'#3e5520', cursor:'pointer'}} />
-                {/* </IconButton> */}
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      ) : (
-        <Stack spacing={2}>
-          {sampleUsers.map((user) => (
-            <Card
-              key={user.id}
+            <Box sx={{ flexGrow: 1 }}>
+              {renderProfileContent(profile)}
+            </Box>
+
+            <IconButton
               sx={{
-                display: "flex",
-                alignItems: "center",
-                p: 2,
-                borderRadius: 3,
-                boxShadow: 2,
-                backgroundColor: "#fff",
+                color: "#fff",
+                backgroundColor: oliveGreen,
+                "&:hover": { backgroundColor: "#3e5520" },
+                alignSelf: "start",
+                cursor: 'pointer',
               }}
             >
-              <Avatar
-                src={user.avatar}
-                alt={user.name}
-                sx={{ width: 56, height: 56, bgcolor: oliveGreen, mr: 2 }}
-              >
-                {user.name[0]}
-              </Avatar>
-              <Box sx={{ flexGrow: 1 }}>
-                <Typography
-                  variant="subtitle1"
-                  sx={{ fontWeight: "bold", color: "#000" }}
-                >
-                  {user.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {user.username}
-                </Typography>
-              </Box>
-              <IconButton
-                sx={{
-                  color: "#fff",
-                  backgroundColor: oliveGreen,
-                  "&:hover": { backgroundColor: "#3e5520" },
-                }}
-              >
-                <PersonAddIcon />
-              </IconButton>
-            </Card>
-          ))}
-        </Stack>
-      )}
+              <PersonAddIcon />
+            </IconButton>
+          </Card>
+        ))}
+      </Stack>
     </DashboardLayout>
   );
 }

@@ -13,8 +13,6 @@ import {
   Divider,
   TextField,
   Button,
-  Tabs,
-  Tab,
   IconButton,
 } from "@mui/material";
 import DashboardLayout from "../../layout/DashboardLayout";
@@ -39,7 +37,6 @@ export default function Dashboard() {
   const auth = useSelector((state) => state.auth);
 
   const [isToken, setIsToken] = useState(false);
-  const [tabValue, setTabValue] = useState(0);
   const [postContent, setPostContent] = useState("");
   const [fileContent, setFileContent] = useState(null);
 
@@ -131,21 +128,8 @@ export default function Dashboard() {
 
         {/* Right Content */}
         <Box sx={{ flex: 2.2, p: 4 }}>
-          {/* Tabs for Posts */}
-          <Tabs
-            value={tabValue}
-            onChange={(e, newVal) => setTabValue(newVal)}
-            textColor="inherit"
-            TabIndicatorProps={{ style: { backgroundColor: oliveGreen } }}
-            sx={{ mb: 3 }}
-          >
-            <Tab label="Your Posts" />
-            <Tab label="Liked Posts" />
-            <Tab label="Saved Posts" />
-          </Tabs>
 
           {/* Posts Feed / Create Post */}
-          {tabValue === 0 && (
             <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
               {/* Create Post */}
               <Card sx={{ p: 3, borderRadius: 3, backgroundColor: "white" }}>
@@ -329,7 +313,6 @@ export default function Dashboard() {
                 </Typography>
               )}
             </Box>
-          )}
         </Box>
       </Box>
     </DashboardLayout>
