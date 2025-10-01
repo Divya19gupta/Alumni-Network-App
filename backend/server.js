@@ -42,8 +42,6 @@ app.use(express.static("uploads"));
 const startServer = async () => {
   try {
     await mongoose.connect(process.env.MONGO_DB_CREDS, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
       tls: true, // ensures Node 20+ can connect
       // tlsAllowInvalidCertificates: true, // only for testing, not production
     });
