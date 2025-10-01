@@ -24,7 +24,7 @@ import { useRouter } from "next/router";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 import { useDispatch } from "react-redux";
-import { reset } from "../../config/redux/action/authAction";
+import { reset } from "../../config/redux/reducer/authReducer";
 const drawerWidth = 240;
 const theme = createTheme({
     palette: {
@@ -110,8 +110,9 @@ const dispatch = useDispatch();
                 const token = localStorage.getItem('token');
                 if(token){
                     localStorage.removeItem('token');
-                    await router.push('/login');
                     dispatch(reset());
+                    await router.push('/login');
+                    
                 }
               }}>
               <ListItemIcon sx={{ color: "white" }}>
