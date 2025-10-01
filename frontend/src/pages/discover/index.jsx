@@ -55,7 +55,7 @@ export default function Discover() {
       {profile.pastWork.length > 0 ? (
         profile.pastWork.map((work) => (
           <Typography key={work._id} variant="body2" color="text.secondary">
-            {work.position} at {work.company} ({work.years})
+            {work.position} at {work.company} 
           </Typography>
         ))
       ) : (

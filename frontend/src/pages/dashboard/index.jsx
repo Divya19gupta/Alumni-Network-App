@@ -42,6 +42,7 @@ export default function Dashboard() {
 
   const postState = useSelector((state) => state.posts);
 
+  
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       router.push("/login");
@@ -203,7 +204,7 @@ export default function Dashboard() {
                     }}
                   >
                     {/* Delete Button */}
-                    <DeleteForeverIcon
+                    {auth.user?.userId?._id == post.userId?._id && (<DeleteForeverIcon
                       size="small"
                       sx={{
                         position: "absolute",
@@ -216,8 +217,8 @@ export default function Dashboard() {
                       onClick={async () => {
                         await dispatch(deletePost(post._id));
                         await dispatch(getAllPost());
-                      }} // replace with your delete handler
-                    ></DeleteForeverIcon>
+                      }} 
+                    ></DeleteForeverIcon>)}
 
                     {/* Post Header */}
                     <Typography variant="subtitle2" color="text.secondary">
@@ -265,20 +266,20 @@ export default function Dashboard() {
                             cursor: "pointer",
                           }}
                         />
-                        <Typography variant="body2" color="text.secondary">
+                        {/* <Typography variant="body2" color="text.secondary">
                           {post.likes?.length ?? 0} Likes
-                        </Typography>
+                        </Typography> */}
 
-                        <IconButton size="small" sx={{ color: "gray" }}>
+                        {/* <IconButton size="small" sx={{ color: "gray" }}>
                           <CommentIcon />
                         </IconButton>
                         <Typography variant="body2" color="text.secondary">
                           {post.comments?.length ?? 0} Comments
-                        </Typography>
+                        </Typography> */}
                       </Box>
 
                       {/* Aesthetic Comment Box */}
-                      <Paper
+                      {/* <Paper
                         sx={{
                           mt: 1,
                           p: 1,
@@ -303,7 +304,7 @@ export default function Dashboard() {
                         <IconButton size="small" sx={{ color: "oliveGreen" }}>
                           <SendIcon />
                         </IconButton>
-                      </Paper>
+                      </Paper> */}
                     </Box>
                   </Card>
                 ))

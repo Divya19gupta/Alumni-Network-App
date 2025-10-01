@@ -81,7 +81,7 @@ const dispatch = useDispatch();
         >
         <Toolbar />
         <Box sx={{ overflow: "auto" }}>
-          <List sx={{pointerEvents:'cursor'}}>
+          <List sx={{cursor:'pointer'}}>
 
             <ListItem button onClick={() => router.push("/profile")}>
               <ListItemIcon sx={{ color: "white" }}>

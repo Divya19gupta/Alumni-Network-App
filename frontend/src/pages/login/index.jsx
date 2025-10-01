@@ -229,7 +229,7 @@ useEffect(() => {
               Welcome to OliveHub
             </Typography>
             <Typography variant="body2" sx={{ lineHeight: 1.6 }}>
-              Explore your dashboard, manage your tasks, and stay organized. Our tools help you streamline your workflow efficiently in a calm, fresh environment inspired by nature.
+              Discover your alumni network on OliveHub. Reconnect with peers, share experiences, and build meaningful professional and personal connections.
             </Typography>
           </RightCard>
         </Card>

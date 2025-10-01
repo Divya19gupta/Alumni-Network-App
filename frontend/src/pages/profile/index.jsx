@@ -200,26 +200,39 @@ export default function ProfileEditor({
   }
 
   return (
-    <DashboardLayout title="Profile">
-      <Box sx={{ maxWidth: 1200, mx: "auto", mt: 6, pb: 6 }}>
-        <TopBanner>
-          <Typography variant="h4" sx={{ color: black, fontWeight: 700 }}>
-            Profile
-          </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ mt: 0.5 }}
-          >
-            sdjfsdfksjhdakjhsdkjfhaskdjhfkasdjhfkasjdhksadjhfkasdjhkjsdhfksdjhfakjsdhkjsadh
-          </Typography>
-        </TopBanner>
+<DashboardLayout title="Profile">
+  <Box
+    sx={{
+      mx: 'auto',
+      mt: 6,
+      pb: 6,
+      minHeight: "100vh", // full screen height
+      display: "flex",
+      flexDirection: "column",
+    }}
+  >
+    <TopBanner>
+      <Typography variant="h4" sx={{ color: black, fontWeight: 700 }}>
+        Profile
+      </Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+      Your profile is your personal space. Showcase your journey, share your passions, and let others discover you.
+      </Typography>
+    </TopBanner>
 
-        <Grid container spacing={4} alignItems="stretch">
-          {/* LEFT: Form fields */}
-          <Grid item xs={12} md={10} sx={{ display: "flex" }}>
-            <StyledCard sx={{ flex: 1 }}>
-              <CardContent sx={{ flexGrow: 1 }}>
+    {/* Fill remaining height with Grid */}
+    <Grid
+      container
+      spacing={4}
+      sx={{ width: "100%", m: 4 }}
+      // sx={{ flex: 1, alignItems: "stretch" }} // makes both grids stretch equally
+    >
+      {/* LEFT: Form fields */}
+      <Grid item xs={12} md={8} sx={{ display: "flex", width: "60%" }}>
+        <StyledCard
+          sx={{ flex: 1, height: "100%", display: "flex", flexDirection: "column" }}
+        >
+          <CardContent sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
                 <Typography
                   variant="h6"
                   sx={{ fontWeight: 700, color: darkOlive, mb: 2 }}
@@ -551,15 +564,18 @@ export default function ProfileEditor({
               </CardContent>
 
               {/* Actions at bottom of card */}
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  gap: 1,
-                  p: 2,
-                  borderTop: "1px solid #eee",
-                }}
-              >
+              
+
+          {/* Actions bar */}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              gap: 1,
+              p: 2,
+              borderTop: "1px solid #eee",
+            }}
+          >
                 {!globalEditMode ? (
                   <Button
                     variant="contained"
@@ -605,9 +621,26 @@ export default function ProfileEditor({
           </Grid>
 
           {/* RIGHT: Avatar + quick meta */}
-          <Grid item xs={12} md={2} sx={{ display: "flex" }}>
-            <StyledCard sx={{ flex: 1 }}>
-              <CardContent sx={{ textAlign: "center", height: "100%" }}>
+           <Grid item xs={12} md={4} sx={{ display: "flex", width: "30%" }}>
+        <StyledCard
+          sx={{
+            flex: 1,
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <CardContent
+            sx={{
+              textAlign: "center",
+              height: "100%",
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
                 <Box sx={{ position: "relative", display: "inline-block", mb: 2 }}>
   <Avatar
     src={

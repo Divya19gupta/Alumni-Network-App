@@ -374,7 +374,7 @@ export default function ViewProfile({ userProfile }) {
                         color={oliveGreen}
                         gutterBottom
                       >
-                        {post.title || "Untitled"}
+                        {post.title || "Post"}
                       </Typography>
 
                       {/* Body */}
@@ -389,7 +389,7 @@ export default function ViewProfile({ userProfile }) {
                       {/* User Info */}
                       <Stack direction="row" spacing={2} alignItems="center">
                         <Avatar
-                          src={post.userId?.profilePicture || "default.jpg"}
+                          src={post.userId?.profilePicture || `${BASE_URL}/images/default.jpg`}
                           alt={post.userId?.name}
                         />
                         <Box>
