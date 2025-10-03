@@ -65,7 +65,7 @@ export default function Dashboard() {
 
   const handleUpload = async () => {
     setStatus("Checking post...");
-    const res = await fetch(`${BASE_URL}/moderate`, {
+    const res = await fetch(`${BASE_URL}moderate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: postContent }),
