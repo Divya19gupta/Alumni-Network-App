@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import postRoutes from "./routes/posts.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import aiRoutes from "./routes/ai.routes.js";
 
 // It **loads environment variables from a `.env` file into `process.env`**.
 dotenv.config();
@@ -30,6 +31,7 @@ app.use(express.json());
 // Routes
 app.use(postRoutes);
 app.use(userRoutes);
+app.use(aiRoutes);
 
 /**
  * We will create a static server to access the generated pdf,files,pictures etc.

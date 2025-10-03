@@ -14,6 +14,7 @@ import {
   TextField,
   Button,
   IconButton,
+  Dialog, DialogTitle, DialogContent, DialogActions
 } from "@mui/material";
 import DashboardLayout from "../../layout/DashboardLayout";
 import { BASE_URL } from "../../config";
@@ -37,8 +38,12 @@ export default function Dashboard() {
   const auth = useSelector((state) => state.auth);
 
   const [isToken, setIsToken] = useState(false);
+  const [isStatus, setStatus] = useState('');
   const [postContent, setPostContent] = useState("");
   const [fileContent, setFileContent] = useState(null);
+   const [openDialog, setOpenDialog] = useState(false);
+  const [blockReason, setBlockReason] = useState("");
+
 
   const postState = useSelector((state) => state.posts);
 
@@ -59,9 +64,33 @@ export default function Dashboard() {
   }, [isToken]);
 
   const handleUpload = async () => {
-    await dispatch(createPost({ file: fileContent, body: postContent }));
-    setPostContent("");
-    setFileContent(null);
+    setStatus("Checking post...");
+    const res = await fetch(`${BASE_URL}/moderate`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: postContent }),
+    });
+    const data = await res.json();
+    console.log("Moderation result:", data);
+
+    if (!data.safe) {
+      // Build a user-friendly reason string
+      const reasons = [];
+      if (data.hate) reasons.push("Hateful content");
+      if (data.violence) reasons.push("Violence");
+      if (data.sexual) reasons.push("Sexual content");
+      if (data.harassment) reasons.push("Harassment or bullying");
+      if (data.selfharm) reasons.push("Self-harm or suicide");
+
+      setBlockReason(reasons.join(", ") || "Harmful content detected");
+      setOpenDialog(true);
+      setStatus("Post blocked for harmful content.");
+    } else {
+      await dispatch(createPost({ file: fileContent, body: postContent }));
+      setPostContent("");
+      setFileContent(null);
+      setStatus("Post is clean! Saved successfully.");
+    }
   };
 
   return (
@@ -184,6 +213,17 @@ export default function Dashboard() {
                   >
                     Post
                   </Button>
+                  <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+                    <DialogTitle>Post Blocked</DialogTitle>
+                    <DialogContent>
+                      Your post was not published because it contains: <strong>{blockReason}</strong>.
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={() => setOpenDialog(false)} color="primary">
+                        Close
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
                 </Box>
               </Card>
 
