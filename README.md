@@ -66,27 +66,32 @@ OLIVEHUB is a modern **Alumni Network Application** designed to connect users, f
 
 ## 📌 Installation
 
-```bash
 # Clone the repository
+```bash
 git clone <repo-url>
 cd OLIVEHUB
-
+```
 # Backend setup
+```bash
 cd backend
 npm install
-
+```
 # Add environment variables in .env
+```bash
 echo "GEMINI_API_KEY=<your_google_gemini_api_key>" >> .env
 echo "MONGO_URL=<your_mongodb_connection_string>" >> .env
 echo "PORT=9090" >> .env
-
+```
 # Run backend
-nodemon index.js
-
+```bash
+npm run prod
+```
 # Frontend setup
+```bash
 cd ../frontend
 npm install
 npm run dev
+```
 
 ---
 
