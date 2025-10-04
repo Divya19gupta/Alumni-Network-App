@@ -107,7 +107,7 @@ npm run dev
 
 ## 🌐 Live Demo
 
-Access the application: `[(https://alumni-network-app-t6l9.vercel.app/)]`
+Access the application: `[https://alumni-network-app-t6l9.vercel.app/]`
 
 ---
 
